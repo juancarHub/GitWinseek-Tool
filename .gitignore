@@ -1,0 +1,78 @@
+#    regla	 |	qué ignora
+#________________|_______________________________________
+#   copias/	    todas las carpetas llamadas copias
+#  /copias/	    solo la de la raíz
+#  datos/copias/    solo esa ruta concreta
+#________________________________________________________
+# si ya fue subida por error, para que la deje de
+# seguir, añadirla aqui y despues : git rm -r --cached copias
+
+# Propios del proyecto:(rellenar):
+
+Push_all.bat
+desktop.ini
+.jcgiticon/
+
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+#Reservorios
+Backs/
+backs/
+Copias/
+copias/
+Backups/
+backups/
+
+#Ejecutables por defecto >=100MB
+#*.exe
+#*.com
+#*.EXE
+#*.COM
+
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment variables
+.env
+
+# Databases
+*.db
+*.sqlite
+data/
+Data/
+
+# Logs
+logs/
+*.log
+
+# Build / packaging
+build/
+dist/
+*.spec
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# Testing / coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db

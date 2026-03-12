@@ -78,7 +78,7 @@ En función del estado detectado:
 
 # Comandos disponibles en GitWinSeek
 
-## Inicializar seguimiento visual
+## ->Inicializar seguimiento visual
 
 ```bash
 GitWinSeek.exe init "ruta_repo"
@@ -87,29 +87,30 @@ Configura el repositorio para seguimiento visual.
 
 Esto:
 
-crea la carpeta .jcgiticon
+- crea la carpeta .jcgiticon
 
-copia los iconos necesarios
+- copia los iconos necesarios
 
-crea desktop.ini
+- crea desktop.ini
 
-registra el repositorio para seguimiento
+- registra el repositorio para seguimiento
 
-Refrescar icono de un repositorio
+## ->Refrescar icono de un repositorio
 
 ```bash
 GitWinSeek.exe refresh "ruta_repo"
 ```
 Actualiza el icono según el estado actual del repositorio.
 
-Refrescar todos los repositorios registrados
+## ->Refrescar todos los repositorios registrados
+```bash
 GitWinSeek.exe refresh-all
-
+```
 Revisa todos los repositorios registrados y actualiza su icono.
 
 Este comando se utiliza normalmente en una tarea programada.
 
-Eliminar seguimiento visual
+## ->Eliminar seguimiento visual
 ```bash
 GitWinSeek.exe remove "ruta_repo"
 ```
@@ -128,7 +129,7 @@ Git Tools
  ```
 
 Esto permite utilizar las herramientas directamente desde el Explorador.
-Ver los Archivos de instalacion y desistalacion de claves en el registro (.reg).
+Ver los Archivos de instalacion y desinstalacion de claves en el registro (.reg).
 (**Para usarlos, actualizar las rutas de los programas dentro de ellos.**)
 
 ## Refresco automático

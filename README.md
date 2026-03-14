@@ -1,6 +1,5 @@
 # JC Git Tools
 
-
 Conjunto de herramientas ligeras para trabajar con repositorios **Git en Windows** de forma visual y rápida.
 
 El sistema está compuesto por dos programas principales que trabajan juntos:
@@ -49,12 +48,12 @@ Esto permite ver el estado del repositorio directamente en el sistema de archivo
 
 ### Estados visuales
 
-| Estado | Icono | Significado |
-|------|------|------|
-| Verde | Repo limpio y sincronizado |
-| Naranja | Cambios locales |
-| Azul | Commit realizado pero pendiente de push |
-| Rojo | Conflictos o error |
+| Estado  | Icono                                   | Significado |
+| ------- | --------------------------------------- | ----------- |
+| Verde   | Repo limpio y sincronizado              |             |
+| Naranja | Cambios locales                         |             |
+| Azul    | Commit realizado pero pendiente de push |             |
+| Rojo    | Conflictos o error                      |             |
 
 De esta forma es posible identificar el estado de cada repositorio **sin abrir ninguna herramienta**.
 
@@ -83,6 +82,7 @@ En función del estado detectado:
 ```bash
 GitWinSeek.exe init "ruta_repo"
 ```
+
 Configura el repositorio para seguimiento visual.
 
 Esto:
@@ -100,25 +100,31 @@ Esto:
 ```bash
 GitWinSeek.exe refresh "ruta_repo"
 ```
+
 Actualiza el icono según el estado actual del repositorio.
 
 ## ->Refrescar todos los repositorios registrados
+
 ```bash
 GitWinSeek.exe refresh-all
 ```
+
 Revisa todos los repositorios registrados y actualiza su icono.
 
 Este comando se utiliza normalmente en una tarea programada.
 
 ## ->Eliminar seguimiento visual
+
 ```bash
 GitWinSeek.exe remove "ruta_repo"
 ```
+
 Elimina el sistema de iconos del repositorio.
 
 # Integración con el Explorador de Windows
 
 Se añaden entradas en el menú contextual:
+
 ```
 Git Tools
  ├─ Abrir Git Win Tool
@@ -126,11 +132,11 @@ Git Tools
  ├─ Refrescar icono Git
  ├─ Quitar seguimiento visual
  └─ Refrescar todos los repos GitWinSeek
- ```
+```
 
 Esto permite utilizar las herramientas directamente desde el Explorador.
-Ver los Archivos de instalacion y desinstalacion de claves en el registro (.reg).
-(**Para usarlos, actualizar las rutas de los programas dentro de ellos.**)
+Ver el Archivo de instalacion y desinstalacion de claves en el registro (.reg).
+"install_menu.exe"
 
 ## Refresco automático
 
@@ -139,29 +145,36 @@ Para mantener los iconos actualizados se utiliza **una tarea programada de Windo
 ```bash
 GitWinSeek.exe refresh-all
 ```
+
 cada cierto tiempo (por ejemplo cada 5 minutos).
 
 ```bash
 schtasks /create /tn "GitWinSeek Refresh" ^
- /tr "\"RUTA AÑ ARCHIVO\GitWinSeek.exe\" refresh-all" ^
+ /tr "\"RUTA AL ARCHIVO\GitWinSeek.exe\" refresh-all" ^
  /sc minute /mo 5
 ```
+
 Esto garantiza que el estado visual siempre esté sincronizado con el repositorio.
 y no tocamos el pull de procesos en segundo plano.
 
 ### - Verificar que la tarea existe
 
 Puedes comprobarlo con:
+
 ```bash
 schtasks /query /tn "GitWinSeek Refresh"
 ```
+
 ### - Probar la tarea manualmente, puedes ejecutarla al instante con:
+
 ```bash
 schtasks /run /tn "GitWinSeek Refresh"
 ```
+
 Esto sirve para probar que realmente refresca los iconos.
 
 ## Para Eliminar la tarea y el auto refresco:
+
 ```bash
 schtasks /delete /tn "GitWinSeek Refresh" /f
 ```

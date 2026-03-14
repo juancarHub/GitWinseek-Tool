@@ -38,7 +38,6 @@ ICON_FILES = {
 }
 
 
-
 def _hidden_subprocess_kwargs():
     if os.name != "nt":
         return {}
@@ -50,11 +49,6 @@ def _hidden_subprocess_kwargs():
         "startupinfo": startupinfo,
         "creationflags": subprocess.CREATE_NO_WINDOW,
     }
-
-
-
-
-
 
 def show_usage_box():
     msg = (
@@ -136,9 +130,6 @@ def run_git(repo, args):
         return result.stdout.strip(), result.returncode
     except Exception:
         return "", 1
-    
-
-
 
 def get_repo_root(path):
     out, code = run_git(path, ["rev-parse", "--show-toplevel"])

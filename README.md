@@ -95,7 +95,7 @@ Esto:
 
 - registra el repositorio para seguimiento
   
-  > Debido a Windows, una vez se inicia el repositorio, hay que entrar en loas propiedades de la carpeta, dentro de personalizar y cambiar icono,pero **No tocar ni elegir  ningun icono** solo salir y cerrar de la ventana de p`ropiedades, el nuevo icono de la carpeta se actualizara sola al salir.
+  > Debido a puñetero Windows, una vez se inicia el repositorio, hay que entrar en loas propiedades de la carpeta, dentro de personalizar y  en cambiar icono, pero **No tocar, ni elegir  ningun icono** solo  **Cancelar**r y cerrar de la ventana de p0ropiedades, el nuevo icono nuestro de la carpeta se actualizara sola al salir.
 
 ## ->Refrescar icono de un repositorio
 

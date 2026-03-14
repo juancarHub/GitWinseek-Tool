@@ -1,7 +1,7 @@
 {
-  "ui_scale": 0.9000000000000001,
-  "main_geometry": "684x643+2971+55",
-  "branch_geometry": "800x520+2173+151",
-  "commit_geometry": "920x560+2053+151",
-  "output_geometry": "780x460+2193+151"
+  "ui_scale": 1.0,
+  "main_geometry": "920x560+234+234",
+  "branch_geometry": "800x520",
+  "commit_geometry": "920x560",
+  "output_geometry": "780x460+274+274"
 }

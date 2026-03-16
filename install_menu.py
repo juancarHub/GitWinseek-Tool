@@ -4,6 +4,11 @@ import winreg
 import tkinter as tk
 from tkinter import messagebox
 
+#pyinstaller --onefile --noconsole --windowed --icon=git_win_tool.ico --add-data "git_win_tool.ico;." install_menu.py
+
+
+
+
 APP_TITLE = "GitWinTool"
 MENU_ROOT_NAME = "GitWinTool"
 

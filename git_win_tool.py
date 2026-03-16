@@ -9,7 +9,7 @@ from pathlib import Path
 from gitwinseek_core import refresh_repo, init_repo, get_repo_root
 
 
-#pyinstaller --onefile --noconsole --windowed --icon=git_win_tool.ico --add-data "git_win_tool.ico;." git_win_tool.py
+#pyinstaller --onedir --noconsole --windowed --icon=git_win_tool.ico --add-data "git_win_tool.ico;." git_win_tool.py
 
 
 

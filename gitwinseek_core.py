@@ -16,7 +16,7 @@ from datetime import datetime
 
 #Compilacion:
 
-# pyinstaller --noconfirm --clean --noconsole  --icon=git_win_tool.ico --name GitWinSeek --onedir --add-data "icons;icons" GitWinSeek.py
+# pyinstaller --noconfirm --clean --noconsole  --windowed --icon=git_win_tool.ico --name GitWinSeek --onedir --add-data "icons;icons" GitWinSeek.py
 
 
 
@@ -38,6 +38,17 @@ ICON_FILES = {
 }
 
 
+def _hidden_subprocess_kwargs():
+    if os.name != "nt":
+        return {}
+
+    startupinfo = subprocess.STARTUPINFO()
+    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+    return {
+        "startupinfo": startupinfo,
+        "creationflags": subprocess.CREATE_NO_WINDOW,
+    }
 
 def show_usage_box():
     msg = (
@@ -112,7 +123,9 @@ def run_git(repo, args):
             cwd=repo,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
+            shell=False,
+            **_hidden_subprocess_kwargs()
         )
         return result.stdout.strip(), result.returncode
     except Exception:
@@ -176,27 +189,45 @@ def write_desktop_ini(repo_root, state):
     icon_path = (icon_dir / icon_file).resolve()
 
     desktop_ini = repo_root / "desktop.ini"
+    hidden_kwargs = _hidden_subprocess_kwargs()
 
     # Si ya existe, quitar atributos para poder reescribirlo
     if desktop_ini.exists():
-        subprocess.run(f'attrib -h -s "{desktop_ini}"', shell=True)
+        subprocess.run(
+            ["attrib", "-h", "-s", str(desktop_ini)],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            shell=False,
+            **hidden_kwargs
+        )
 
     content = (
         "[.ShellClassInfo]\n"
         f"IconResource={icon_path},0\n"
-         "ConfirmFileOp=0\n"
+        "ConfirmFileOp=0\n"
         f"InfoTip= Registrada con GitWinSeek | Estado:--> {state} \n"
-        #"InfoTip=Esta carpeta esta registrada con GitWinSeek.\n"
     )
 
     with open(desktop_ini, "w", encoding="utf-8", newline="\r\n") as f:
         f.write(content)
 
     # La carpeta NO oculta; solo read-only para que Windows procese desktop.ini
-    subprocess.run(f'attrib +r "{repo_root}"', shell=True)
+    subprocess.run(
+        ["attrib", "+r", str(repo_root)],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        shell=False,
+        **hidden_kwargs
+    )
 
     # El desktop.ini sí queda oculto y de sistema
-    subprocess.run(f'attrib +h +s "{desktop_ini}"', shell=True)
+    subprocess.run(
+        ["attrib", "+h", "+s", str(desktop_ini)],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        shell=False,
+        **hidden_kwargs
+    )
     
 def apply_visual_refresh(repo_root):
     time.sleep(0.15)
@@ -218,10 +249,11 @@ def is_on_desktop(path: Path) -> bool:
 
 def clear_icon_cache():
     subprocess.run(
-        
         [r"C:\Windows\System32\ie4uinit.exe", "-ClearIconCache"],
         stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL
+        stderr=subprocess.DEVNULL,
+        shell=False,
+        **_hidden_subprocess_kwargs()
     )
 
 def refresh_explorer_path(path):
@@ -230,6 +262,10 @@ def refresh_explorer_path(path):
     SHCNE_ASSOCCHANGED = 0x08000000
     SHCNF_PATHW = 0x0005
     SHCNF_FLUSH = 0x1000
+
+    SHCNF_IDLIST = 0
+
+    ctypes.windll.shell32.SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, None, None)
 
     p = str(path)
 
@@ -366,29 +402,43 @@ def refresh_all(verbose=False):
             continue
 
         repo_root = get_repo_root(path)
+        data = load_registry()
+        refreshed_any = False
 
-        if not repo_root:
+        for r in list(data["repos"]):
+            path = Path(r["path"])
+
+            if not path.exists():
+                if verbose:
+                    print("Ruta eliminada:", path)
+                unregister_repo(path)
+                continue
+
+            repo_root = get_repo_root(path)
+
+            if not repo_root:
+                if verbose:
+                    print("Ya no es repo:", path)
+                unregister_repo(path)
+                continue
+
+            state = get_state(repo_root)
+            write_desktop_ini(repo_root, state)
+
+            r["last_refresh"] = datetime.now().isoformat()
+            refreshed_any = True
+
             if verbose:
-                print("Ya no es repo:", path)
-            unregister_repo(path)
-            continue
+                print(repo_root, state)
 
-        state = get_state(repo_root)
+        clear_icon_cache()
 
-        write_desktop_ini(repo_root, state)
+        if refreshed_any:
+            refresh_explorer_path(DESKTOP_DIR)
+            
 
-        r["last_refresh"] = datetime.now().isoformat()
-        #clear_icon_cache()
-        #refresh_explorer_path(repo_root)
-        #refresh_explorer_path(repo_root.parent)
-
-        if verbose:
-            print(repo_root, state)
-    clear_icon_cache()        
-    refresh_explorer_path(repo_root)
-
-    save_registry(data)
-    print(APPDATA)
+        save_registry(data)
+        print(APPDATA)
 
 def show_registry():
 
